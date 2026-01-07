@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Masahide Yanagisawa</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+                @keyframes bounceY {
+                    0%, 100% { transform: translateY(0); }
+                    20% { transform: translateY(-8px); }
+                    40% { transform: translateY(4px); }
+                    60% { transform: translateY(-6px); }
+                    80% { transform: translateY(2px); }
+                }
+                .bouncy-char {
+                    display: inline-block;
+                    animation: bounceY 2s infinite;
+                }
+                .bouncy-char:nth-of-type(1) { animation-delay: 0s; }
+                .bouncy-char:nth-of-type(2) { animation-delay: 10s; }
+        :root {
+            --primary-bg: #1B1B1B;
+            --secondary-bg: #292929;
+            --neutral-grey: #808080;
+            --text-white: #FFFFFF;
+            --accent-orange: #FFA31A;
+            --bright-shadow: 0 0 3px 1px #FFD700, 0 0 3px 1px #FFA31A;
+        .project-card-bright:hover {
+            box-shadow: var(--bright-shadow);
+            transition: box-shadow 0.3s;
+        }
+                .certificate-card-bright:hover {
+                    box-shadow: var(--bright-shadow);
+                    transition: box-shadow 0.3s;
+                }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-white);
+            overflow-x: hidden;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Section fade-in animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-bg);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--neutral-grey);
+            border-radius: 5px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-orange);
+        }
+        
+        /* MODAL STYLES FROM YOUR EXISTING CODE (Updated for dark theme) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 163, 26, 0.9);
+            color: #000;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .modal-nav:hover {
+            background: rgba(255, 163, 26, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .modal-nav.prev {
+            left: 20px;
+        }
+        
+        .modal-nav.next {
+            right: 20px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 163, 26, 0.9);
+            color: #000;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 163, 26, 1);
+            transform: scale(1.1);
+        }
+        
+        /* Image counter */
+        .image-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(41, 41, 41, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Gallery image hover effect */
+        .gallery-item {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+        
+        .gallery-item img {
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Certificate image fix */
+        .certificate-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        
+        /* Smooth transitions */
+        .transition-all-custom {
+            transition: all 0.3s ease;
+        }
+        
+        /* Skill card animation */
+        .skill-badge {
+            transition: transform 0.3s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+        }
+        
+        .skill-badge:hover {
+            transform: scale(1.08) rotate(-2deg);
+            box-shadow: 0 8px 24px 0 rgba(255, 163, 26, 0.2), 0 1.5px 6px 0 rgba(255, 163, 26, 0.1);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-[#1B1B1B] text-white">
+    
+    <!-- Navigation -->
+    <nav id="side-nav" class="fixed left-0 top-0 h-full w-64 bg-[#292929] z-50 hidden lg:flex flex-col items-center py-10">
+        <div class="mb-12">
+            <h1 class="text-2xl font-bold"><span class="text-[#FFA31A]">M</span>asahide</h1>
+        </div>
+        
+        <ul class="space-y-8 w-full px-6">
+            <li>
+                <a href="#hero" class="nav-link flex items-center text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="hero">
+                    <i class="fas fa-home mr-4 text-lg"></i>
+                    <span class="font-medium">Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#about" class="nav-link flex items-center text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="about">
+                    <i class="fas fa-user mr-4 text-lg"></i>
+                    <span class="font-medium">About</span>
+                </a>
+            </li>
+            <li>
+                <a href="#skills" class="nav-link flex items-center text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="skills">
+                    <i class="fas fa-code mr-4 text-lg"></i>
+                    <span class="font-medium">Skills</span>
+                </a>
+            </li>
+            <li>
+                <a href="#certificates" class="nav-link flex items-center text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="certificates">
+                    <i class="fas fa-certificate mr-4 text-lg"></i>
+                    <span class="font-medium">Certificates</span>
+                </a>
+            </li>
+            <li>
+                <a href="#projects" class="nav-link flex items-center text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="projects">
+                    <i class="fas fa-briefcase mr-4 text-lg"></i>
+                    <span class="font-medium">Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="#contact" class="nav-link flex items-center text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="contact">
+                    <i class="fas fa-envelope mr-4 text-lg"></i>
+                    <span class="font-medium">Contact</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="mt-auto text-gray-500 text-sm">
+            <p>© 2024 Masahide</p>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation -->
+    <nav id="mobile-nav" class="fixed top-0 left-0 w-full bg-[#292929] z-50 flex lg:hidden justify-between items-center px-6 py-4 shadow-lg">
+        <h1 class="text-xl font-bold"><span class="text-[#FFA31A]">M</span>asahide</h1>
+        
+        <button id="mobile-menu-toggle" class="text-white text-2xl">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <div id="mobile-menu" class="absolute top-full left-0 w-full bg-[#292929] shadow-lg hidden">
+            <ul class="py-4">
+                <li class="border-b border-gray-700">
+                    <a href="#hero" class="nav-link block py-3 px-6 text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="hero">Home</a>
+                </li>
+                <li class="border-b border-gray-700">
+                    <a href="#about" class="nav-link block py-3 px-6 text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="about">About</a>
+                </li>
+                <li class="border-b border-gray-700">
+                    <a href="#skills" class="nav-link block py-3 px-6 text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="skills">Skills</a>
+                </li>
+                <li class="border-b border-gray-700">
+                    <a href="#certificates" class="nav-link block py-3 px-6 text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="certificates">Certificates</a>
+                </li>
+                <li class="border-b border-gray-700">
+                    <a href="#projects" class="nav-link block py-3 px-6 text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="projects">Projects</a>
+                </li>
+                <li>
+                    <a href="#contact" class="nav-link block py-3 px-6 text-gray-300 hover:text-[#FFA31A] transition-colors duration-300" data-section="contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Image Viewer Modal (FROM YOUR EXISTING CODE) -->
+    <div id="imageModal" class="modal">
+        <button class="modal-close">&times;</button>
+        
+        <button class="modal-nav prev">‹</button>
+        <button class="modal-nav next">›</button>
+        
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" src="" alt="Viewer image">
+            <div id="imageCounter" class="image-counter">1 / 1</div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="lg:ml-64">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex flex-col lg:flex-row items-center justify-center px-6 lg:px-16 pt-20 lg:pt-0 fade-in-section">
+            <!-- Left side - Profile Image -->
+            <div class="lg:w-1/2 flex justify-center mb-10 lg:mb-0">
+                <div class="relative w-64 h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden border-4 border-[#FFA31A] shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                    <!-- Profile Image -->
+                    <img src="images/aaaa.png" alt="Masahide Yanagisawa" class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- Right side - Intro -->
+            <div class="lg:w-1/2 lg:pl-12">
+                <h2 class="text-4xl lg:text-6xl font-bold mb-4">
+                    Hi, I<span class="bouncy-char">'</span>m <span class="text-[#FFA31A]">Masahide</span>
+                </h2>
+                <h3 class="text-2xl lg:text-3xl text-[#808080] mb-6">
+                    UI/UX Designer & Front-End Developer
+                </h3>
+                <p class="text-lg text-gray-300 mb-8 max-w-2xl">
+                    I am a passionate UI/UX Designer who focuses on creating intuitive and visually engaging interfaces. I design with the user in mind, aiming to improve usability and overall user experience.
+                </p>
+                
+                <!-- Buttons -->
+                <div class="flex flex-wrap gap-4 mb-10">
+                    <a href="your-cv.pdf" download="masahideyanagisawacv" class="bg-[#FFA31A] text-black font-semibold px-8 py-3 rounded-lg hover:bg-opacity-90 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center">
+                        <i class="fas fa-download mr-2"></i> Download CV
+                    </a>
+                    <a href="#contact" class="border border-[#FFA31A] text-[#FFA31A] font-semibold px-8 py-3 rounded-lg hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                        Contact Me
+                    </a>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="flex space-x-6">
+                    <a href="https://github.com/Yamanoban-17" class="w-12 h-12 rounded-full bg-[#292929] flex items-center justify-center text-xl hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/Yamanoban-17" class="w-12 h-12 rounded-full bg-[#292929] flex items-center justify-center text-xl hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="mailto:your.masahideyanagisawa@gmail.com" class="w-12 h-12 rounded-full bg-[#292929] flex items-center justify-center text-xl hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section id="about" class="min-h-screen px-6 lg:px-16 py-20 fade-in-section">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl font-bold mb-2">About <span class="text-[#FFA31A]">Me</span></h2>
+                <p class="text-gray-400 mb-12">My background and experience</p>
+                
+                <!-- Top Row: Education & Experience -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+                    <!-- Education Card -->
+                    <div class="bg-[#292929] rounded-xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4">
+                                <i class="fas fa-graduation-cap text-black text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Education</h3>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-[#FFA31A] pl-4 py-1">
+                                <h4 class="text-xl font-semibold">BS in Information Technology</h4>
+                                <p class="text-gray-400">Filamer Christian University • 2023 - Present</p>
+                                <p class="text-gray-300 mt-2">Specialized in web development and UI/UX design.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Experience Card -->
+                    <div class="bg-[#292929] rounded-xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4">
+                                <i class="fas fa-briefcase text-black text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Experience</h3>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div class="border-l-2 border-[#FFA31A] pl-4 py-1">
+                                <h4 class="text-xl font-semibold">UI/UX Designer</h4>
+                                <p class="text-gray-400">Freelance • 2023-Present</p>
+                                <p class="text-gray-300 mt-2">Designing intuitive and visually engaging interfaces for various clients and personal projects.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom Row: About / Personal Introduction -->
+                <div class="bg-[#292929] rounded-xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-500">
+                    <h3 class="text-2xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-user-circle text-[#FFA31A] mr-3"></i>
+                        Personal Introduction
+                    </h3>
+                    <p class="text-gray-300 mb-4">
+                        My name is Masahide Yanagisawa, and I am a UI/UX Designer who enjoys creating simple and user-friendly designs. I like making interfaces that are clean, easy to use, and visually clear. My goal is to design experiences that users can understand and enjoy.
+                    </p>
+                    <p class="text-gray-300 mb-4">
+                        I focus on designing with the user in mind by improving usability and layout. I enjoy creating wireframes and simple prototypes, and I am always learning to improve my design skills.
+                    </p>
+                    <p class="text-gray-300">
+                        In my free time, I enjoy playing video games. Games help me understand how users interact with interfaces and how good design improves the experience. This hobby inspires me to create better and more engaging designs.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Skills Section -->
+        <section id="skills" class="min-h-screen px-6 lg:px-16 py-20 bg-gradient-to-b from-[#1B1B1B] to-[#292929] fade-in-section">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl font-bold mb-2">My <span class="text-[#FFA31A]">Skills</span></h2>
+                <p class="text-gray-400 mb-12">Technologies and tools I work with</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Front-End Card -->
+                    <div class="bg-[#292929] rounded-xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                        <div class="flex items-center mb-8">
+                            <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4">
+                                <i class="fas fa-desktop text-black text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Front-End</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-html5 text-xl mb-1"></i>
+                                <p class="font-medium">HTML</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-css3-alt text-xl mb-1"></i>
+                                <p class="font-medium">CSS</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-js text-xl mb-1"></i>
+                                <p class="font-medium">JavaScript</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-css3 text-xl mb-1"></i>
+                                <p class="font-medium">Tailwind CSS</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Back-End Card -->
+                    <div class="bg-[#292929] rounded-xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                        <div class="flex items-center mb-8">
+                            <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4">
+                                <i class="fas fa-server text-black text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Back-End</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- REPLACE WITH YOUR EXISTING SKILL BADGES -->
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-python text-xl mb-1"></i>
+                                <p class="font-medium">Python</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-php text-xl mb-1"></i>
+                                <p class="font-medium">PHP</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fas fa-fire text-xl mb-1"></i>
+                                <p class="font-medium">Laravel</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fas fa-database text-xl mb-1"></i>
+                                <p class="font-medium">MySQL</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tools Card -->
+                    <div class="bg-[#292929] rounded-xl p-6 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                        <div class="flex items-center mb-8">
+                            <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4">
+                                <i class="fas fa-tools text-black text-xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold">Tools</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fas fa-code text-xl mb-1"></i>
+                                <p class="font-medium">VS Code</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-figma text-xl mb-1"></i>
+                                <p class="font-medium">Figma</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-git-alt text-xl mb-1"></i>
+                                <p class="font-medium">Git</p>
+                            </div>
+                            <div class="skill-badge bg-[#1B1B1B] text-white py-3 px-4 rounded-lg text-center hover:bg-[#FFA31A] hover:text-black transform hover:scale-105 transition-all duration-300">
+                                <i class="fab fa-github text-xl mb-1"></i>
+                                <p class="font-medium">GitHub</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Certificates Section WITH YOUR EXISTING CARD STRUCTURE -->
+        <section id="certificates" class="min-h-screen px-6 lg:px-16 py-20 fade-in-section">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl font-bold mb-2">My <span class="text-[#FFA31A]">Certificates</span></h2>
+                <p class="text-gray-400 mb-12">Professional certifications and achievements</p>
+                
+                <!-- YOUR EXISTING CERTIFICATE CARDS STRUCTURE (with updated colors) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Certificate 1 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 flex flex-col h-full certificate-card-bright">
+                        <div class="h-40 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="certificates" data-index="0">
+                            <img src="images/cer1.jpg" alt="C# Algorithms Certificate" class="certificate-img">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-xl font-bold mb-2">Careers in Web Design and Development</h3>
+                            <p class="mb-4 text-gray-400">LinkedIn learning • 2025</p>
+                            <p class="mb-6 text-gray-300">This course introduces different career paths in web design and development, the skills and tools required, and how personality traits align with each role.</p>
+                            <div class="mt-auto">
+                                <button class="view-certificate-btn w-full bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded transition-all-custom" data-gallery="certificates" data-index="0">
+                                    View Certificate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate 2 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 flex flex-col h-full certificate-card-bright">
+                        <div class="h-40 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="certificates" data-index="1">
+                            <img src="images/cer2.jpg" alt="Cybersecurity with Cloud Computing Certificate" class="certificate-img">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-xl font-bold mb-2">Cybersecurity Awareness: Malware</h3>
+                            <p class="mb-4 text-gray-400">LinkedIn learning • 2025</p>
+                            <p class="mb-6 text-gray-300">This course introduces common types of malware, their risks, and effective strategies to defend and analyze malicious software.</p>
+                            <div class="mt-auto">
+                                <button class="view-certificate-btn w-full bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded transition-all-custom" data-gallery="certificates" data-index="1">
+                                    View Certificate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate 3 -->
+                    <!-- Certificate 3 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 flex flex-col h-full certificate-card-bright">
+                        <div class="h-40 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="certificates" data-index="2">
+                            <img src="images/cer3.jpg" alt="Debugging in C# Certificate" class="certificate-img">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-xl font-bold mb-2">Cybersecurity Awareness: AI</h3>
+                            <p class="mb-4 text-gray-400">LinkedIn learning • 2025</p>
+                            <p class="mb-6 text-gray-300">This course explains how AI impacts cybersecurity, including emerging threats, ethical concerns, and defensive measures.</p>
+                            <div class="mt-auto">
+                                <button class="view-certificate-btn w-full bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded transition-all-custom" data-gallery="certificates" data-index="2">
+                                    View Certificate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate 4 -->
+                    <!-- Certificate 4 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 flex flex-col h-full certificate-card-bright">
+                        <div class="h-40 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="certificates" data-index="3">
+                            <img src="images/cer4.jpg" alt="IT Security Foundations Certificate" class="certificate-img">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-xl font-bold mb-2">Practice It: SQL Joins</h3>
+                            <p class="mb-4 text-gray-400">LinkedIn learning • 2025</p>
+                            <p class="mb-6 text-gray-300">Learn and practice the four main types of SQL joins: inner, left, right, and full outer joins.</p>
+                            <div class="mt-auto">
+                                <button class="view-certificate-btn w-full bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded transition-all-custom" data-gallery="certificates" data-index="3">
+                                    View Certificate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Certificate 5 -->
+                    <!-- Certificate 5 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 flex flex-col h-full certificate-card-bright">
+                        <div class="h-40 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="certificates" data-index="4">
+                            <img src="images/cer5.jpg" alt="Ignite Bootcamp Certificate" class="certificate-img">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-xl font-bold mb-2">SQL for Data Analysis</h3>
+                            <p class="mb-4 text-gray-400">LinkedIn learning • 2025</p>
+                            <p class="mb-6 text-gray-300">Gain hands-on practice using GitHub Codespaces in a practical learning environment.</p>
+                            <div class="mt-auto">
+                                <button class="view-certificate-btn w-full bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded transition-all-custom" data-gallery="certificates" data-index="4">
+                                    View Certificate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Projects Section WITH YOUR EXISTING CARD STRUCTURE -->
+        <section id="projects" class="min-h-screen px-6 lg:px-16 py-20 bg-gradient-to-b from-[#1B1B1B] to-[#292929] fade-in-section">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="text-4xl font-bold mb-2">My <span class="text-[#FFA31A]">Projects</span></h2>
+                <p class="text-gray-400 mb-12">Recent work and applications</p>
+                
+                <!-- YOUR EXISTING PROJECT CARDS STRUCTURE (with updated colors) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Project 1 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 project-card-bright">
+                        <div class="h-48 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="projects" data-index="0">
+                            <img src="images/gun-3.png" alt="Savage Guns E-commerce" class="certificate-img">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">E-Commerce Platform</h3>
+                            <p class="mb-4 text-gray-300">Savage Guns is an online shopping website that displays information about firearms, accessories, and related gear.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">HTML</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">CSS</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">JavaScript</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">Tailwind</span>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button class="view-project-btn flex-1 bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded text-center transition-all-custom" data-gallery="projects" data-index="0">
+                                    View Project
+                                </button>
+                                <a href="https://github.com/Lao-Mao21/GunDealership.git" class="flex-1 border border-[#FFA31A] text-[#FFA31A] hover:bg-[#FFA31A] hover:text-black font-medium py-2 px-4 rounded text-center transition-all-custom">
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project 2 -->
+                    <div class="bg-[#292929] rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500 project-card-bright">
+                        <div class="h-48 bg-[#1B1B1B] flex items-center justify-center gallery-item" data-gallery="projects1" data-index="0">
+                            <img src="images/mov4.png" alt="Movies Management System" class="certificate-img">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Movies Management System</h3>
+                            <p class="mb-4 text-gray-300">A movie management system that keeps track of movies by storing their title, director, year of release, and genre. It helps organize movie records in a simple and easy way.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">HTML</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">CSS</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">JavaScript</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">Tailwind</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">PHP</span>
+                                <span class="bg-[#1B1B1B] text-sm px-3 py-1 rounded-full text-[#FFA31A]">Laravel</span>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button class="view-project-btn flex-1 bg-[#FFA31A] hover:bg-[#FF8C00] text-black font-medium py-2 px-4 rounded text-center transition-all-custom" data-gallery="projects1" data-index="0">
+                                    View Project
+                                </button>
+                                <a href="https://github.com/Yamanoban-17/Yanagisawa_Midterm_Project.git" class="flex-1 border border-[#FFA31A] text-[#FFA31A] hover:bg-[#FFA31A] hover:text-black font-medium py-2 px-4 rounded text-center transition-all-custom">
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="min-h-screen px-6 lg:px-16 py-20 fade-in-section">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-2">Get In <span class="text-[#FFA31A]">Touch</span></h2>
+                <p class="text-gray-400 mb-12">Feel free to reach out for collaborations or just a friendly hello</p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- Contact Form -->
+                    <div class="bg-[#292929] rounded-xl p-8 shadow-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-500">
+                        <h3 class="text-2xl font-bold mb-6">Send a Message</h3>
+                        
+                        <form id="contact-form">
+                            <div class="mb-6">
+                                <label for="name" class="block text-gray-300 mb-2">Your Name</label>
+                                <input type="text" id="name" class="w-full bg-[#1B1B1B] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#FFA31A] transition-colors duration-300" required>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="email" class="block text-gray-300 mb-2">Email Address</label>
+                                <input type="email" id="email" class="w-full bg-[#1B1B1B] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#FFA31A] transition-colors duration-300" required>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <label for="message" class="block text-gray-300 mb-2">Your Message</label>
+                                <textarea id="message" rows="5" class="w-full bg-[#1B1B1B] border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#FFA31A] transition-colors duration-300 resize-none" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-[#FFA31A] text-black font-semibold py-3 rounded-lg hover:bg-opacity-90 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div>
+                        <h3 class="text-2xl font-bold mb-8">Contact Information</h3>
+                        
+                        <div class="space-y-6 mb-10">
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-envelope text-black text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-1">Email</h4>
+                                    <p class="text-gray-300">masahideyanagisawa@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-phone text-black text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-1">Phone</h4>
+                                    <p class="text-gray-300">+639848237840</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="w-12 h-12 rounded-lg bg-[#FFA31A] flex items-center justify-center mr-4 flex-shrink-0">
+                                    <i class="fas fa-map-marker-alt text-black text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-1">Location</h4>
+                                    <p class="text-gray-300">Roxas City, Philippines</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Links -->
+                        <div>
+                            <h4 class="text-lg font-semibold mb-4">Connect with me</h4>
+                            <div class="flex space-x-4">
+                                <a href="https://github.com/Yamanoban-17" class="w-12 h-12 rounded-full bg-[#1B1B1B] flex items-center justify-center text-xl hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/masahide-yanagisawa-6184bb395/" class="w-12 h-12 rounded-full bg-[#1B1B1B] flex items-center justify-center text-xl hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="https://www.facebook.com/masahide.yanagisawa.3" class="w-12 h-12 rounded-full bg-[#1B1B1B] flex items-center justify-center text-xl hover:bg-[#FFA31A] hover:text-black transform hover:-translate-y-1 transition-all duration-300">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer class="bg-[#292929] py-8 px-6 lg:px-16 text-center">
+            <p class="text-gray-400">© 2025 Masahide Yanagisawa. All rights reserved.</p>
+        </footer>
+    </main>
+
+    <!-- JavaScript with YOUR EXISTING MODAL LOGIC -->
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            this.innerHTML = menu.classList.contains('hidden') ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-times"></i>';
+        });
+        
+        // Active navigation link
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            // Set active link based on current section
+            function setActiveLink() {
+                const sections = document.querySelectorAll('section');
+                let currentSection = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop - 100;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                        currentSection = section.id;
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('text-[#FFA31A]');
+                    if (link.getAttribute('data-section') === currentSection) {
+                        link.classList.add('text-[#FFA31A]');
+                    }
+                });
+            }
+            
+            // Set active link on scroll
+            window.addEventListener('scroll', setActiveLink);
+            setActiveLink(); // Initial call
+            
+            // Fade-in sections on scroll
+            const fadeSections = document.querySelectorAll('.fade-in-section');
+            
+            const fadeInOnScroll = function() {
+                fadeSections.forEach(section => {
+                    const sectionTop = section.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (sectionTop < windowHeight - 100) {
+                        section.classList.add('is-visible');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', fadeInOnScroll);
+            window.addEventListener('load', fadeInOnScroll);
+            fadeInOnScroll(); // Initial call
+            
+            // Close mobile menu when clicking a link
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const menuToggle = document.getElementById('mobile-menu-toggle');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                });
+            });
+            
+            // Form submission
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Message sent successfully! I\'ll get back to you soon.');
+                this.reset();
+            });
+            
+            // YOUR EXISTING IMAGE MODAL FUNCTIONALITY (Updated for dark theme)
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const imageCounter = document.getElementById('imageCounter');
+            const modalClose = document.querySelector('.modal-close');
+            const prevBtn = document.querySelector('.modal-nav.prev');
+            const nextBtn = document.querySelector('.modal-nav.next');
+            
+            // Sample image galleries (using YOUR actual image paths)
+            const galleries = {
+                certificates: [
+                    'images/cer1.jpg',
+                    'images/cer2.jpg',
+                    'images/cer3.jpg',
+                    'images/cer4.jpg',
+                    'images/cer5.jpg'
+                ],
+                projects: [
+                    'images/gun-1.png',
+                    'images/gun-2.png',
+                    'images/gun-3.png',
+                    'images/gun-4.png',
+                    'images/gun-5.png'
+                ],
+                projects1: [
+                    'images/mov4.png',
+                    'images/mov3.png',
+                    'images/mov2.png',
+                    'images/mov1.png'
+                ]
+            };
+            
+            let currentGallery = '';
+            let currentIndex = 0;
+            
+            // Function to open modal with specific gallery and index
+            function openModal(galleryName, index) {
+                currentGallery = galleryName;
+                currentIndex = index;
+                modalImage.src = galleries[galleryName][index];
+                imageCounter.textContent = `${index + 1} / ${galleries[galleryName].length}`;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            }
+            
+            // Function to close modal
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Function to navigate to previous image
+            function prevImage() {
+                if (currentGallery) {
+                    currentIndex = (currentIndex - 1 + galleries[currentGallery].length) % galleries[currentGallery].length;
+                    modalImage.src = galleries[currentGallery][currentIndex];
+                    imageCounter.textContent = `${currentIndex + 1} / ${galleries[currentGallery].length}`;
+                }
+            }
+            
+            // Function to navigate to next image
+            function nextImage() {
+                if (currentGallery) {
+                    currentIndex = (currentIndex + 1) % galleries[currentGallery].length;
+                    modalImage.src = galleries[currentGallery][currentIndex];
+                    imageCounter.textContent = `${currentIndex + 1} / ${galleries[currentGallery].length}`;
+                }
+            }
+            
+            // Event listeners for certificate and project buttons
+            document.querySelectorAll('.view-certificate-btn, .view-project-btn, .gallery-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const gallery = this.getAttribute('data-gallery');
+                    const index = parseInt(this.getAttribute('data-index'));
+                    openModal(gallery, index);
+                });
+            });
+            
+            // Event listeners for modal controls
+            modalClose.addEventListener('click', closeModal);
+            prevBtn.addEventListener('click', prevImage);
+            nextBtn.addEventListener('click', nextImage);
+            
+            // Close modal when clicking outside the image
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (modal.classList.contains('active')) {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                    } else if (e.key === 'ArrowLeft') {
+                        prevImage();
+                    } else if (e.key === 'ArrowRight') {
+                        nextImage();
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
